@@ -43,12 +43,12 @@ RUN wget https://copr.fedorainfracloud.org/coprs/kylegospo/bazzite/repo/fedora-$
     wget https://copr.fedorainfracloud.org/coprs/kylegospo/gnome-vrr/repo/fedora-$(rpm -E %fedora)/kylegospo-gnome-vrr-fedora-$(rpm -E %fedora).repo -O /etc/yum.repos.d/_copr_kylegospo-gnome-vrr.repo && \
     wget https://copr.fedorainfracloud.org/coprs/ycollet/audinux/repo/fedora-$(rpm -E %fedora)/ycollet-audinux-fedora-$(rpm -E %fedora).repo -O /etc/yum.repos.d/_copr_ycollet-audinux.repo && \
     wget https://copr.fedorainfracloud.org/coprs/lyessaadi/gradience/repo/fedora-$(rpm -E %fedora)/lyessaadi-gradience-fedora-$(rpm -E %fedora).repo -O /etc/yum.repos.d/_copr_lyessaadi-gradience.repo && \
-    wget https://copr.fedorainfracloud.org/coprs/kylegospo/rom-properties/repo/fedora-$(rpm -E %fedora)/kylegospo-rom-properties-fedora-$(rpm -E %fedora).repo -O /etc/yum.repos.d/_copr_kylegospo-rom-properties.repo && \
-    wget https://pkgs.tailscale.com/stable/fedora/tailscale.repo -O /etc/yum.repos.d/tailscale.repo && \
-    sed -i 's@gpgcheck=1@gpgcheck=0@g' /etc/yum.repos.d/tailscale.repo
+    wget https://copr.fedorainfracloud.org/coprs/kylegospo/rom-properties/repo/fedora-$(rpm -E %fedora)/kylegospo-rom-properties-fedora-$(rpm -E %fedora).repo -O /etc/yum.repos.d/_copr_kylegospo-rom-properties.repo
 
 # Remove unneeded packages
 RUN rpm-ostree override remove \
+    nano-default-editor \
+    ublue-os-signing \
     ublue-os-update-services \
     firefox \
     firefox-langpacks \
@@ -56,6 +56,12 @@ RUN rpm-ostree override remove \
 
 # Install new packages
 RUN rpm-ostree install \
+    clevis \
+    clevis-dracut \
+    clevis-udisks2 \
+    freeipa-client \
+    vim \
+    vim-default-editor \
     ublue-update \
     extest.i686 \
     discover-overlay \
@@ -77,7 +83,6 @@ RUN rpm-ostree install \
     obs-vkcapture \
     ladspa-caps-plugins \
     ladspa-noise-suppression-for-voice \
-    tailscale \
     btop \
     fish \
     xdotool \
@@ -153,7 +158,6 @@ RUN if grep -q "kinoite" <<< "${BASE_IMAGE_NAME}"; then \
         gnome-shell-extension-blur-my-shell \
         gnome-shell-extension-hanabi \
         gnome-shell-extension-gamerzilla \
-        gnome-shell-extension-tailscale-status \
         rom-properties-gtk3 \
         openssh-askpass && \
     rpm-ostree override remove \
@@ -210,7 +214,6 @@ RUN /tmp/image-info.sh && \
     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/_copr_ycollet-audinux.repo && \
     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/_copr_lyessaadi-gradience.repo && \
     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/_copr_kylegospo-rom-properties.repo && \
-    sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/tailscale.repo && \
     sed -i 's/#DefaultTimeoutStopSec.*/DefaultTimeoutStopSec=15s/' /etc/systemd/user.conf && \
     sed -i 's/#DefaultTimeoutStopSec.*/DefaultTimeoutStopSec=15s/' /etc/systemd/system.conf && \
     mkdir -p /usr/etc/flatpak/remotes.d && \
@@ -226,7 +229,6 @@ RUN /tmp/image-info.sh && \
     systemctl disable rpm-ostreed-automatic.timer && \
     systemctl enable ublue-update.timer && \
     systemctl enable bazzite-hardware-setup.service && \
-    systemctl enable tailscaled.service && \
     systemctl --global enable bazzite-user-setup.service && \
     if grep -q "kinoite" <<< "${BASE_IMAGE_NAME}"; then \
         sed -i '/^PRETTY_NAME/s/Kinoite/Bazzite/' /usr/lib/os-release && \
