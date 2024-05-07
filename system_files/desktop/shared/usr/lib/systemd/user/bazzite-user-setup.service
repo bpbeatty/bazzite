@@ -1,10 +1,9 @@
 [Unit]
 Description=Configure Bazzite for current user
-Requires=xdg-desktop-autostart.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/bazzite-user-setup
+ExecStart=/usr/libexec/bazzite-user-setup
 
 [Install]
 WantedBy=default.target
