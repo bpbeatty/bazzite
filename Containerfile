@@ -298,6 +298,7 @@ RUN rpm-ostree install \
         compsize \
         input-remapper \
         system76-scheduler \
+        ryzenadj \
         powertop \
         i2c-tools \
         udica \
@@ -702,7 +703,6 @@ RUN rpm-ostree install \
     vpower \
     ds-inhibit \
     steam_notif_daemon \
-    ryzenadj \
     sdgyrodsu \
     ibus-pinyin \
     ibus-table-chinese-cangjie \
