@@ -225,6 +225,11 @@ RUN rpm-ostree override replace \
     --from repo=updates \
         libopenmpt \
         || true && \
+    rpm-ostree override replace \
+    --experimental \
+    --from repo=updates \
+        llvm-libs \
+        || true && \
     rpm-ostree override remove \
         glibc32 \
         || true && \
@@ -707,6 +712,7 @@ RUN rpm-ostree install \
     ibus-pinyin \
     ibus-table-chinese-cangjie \
     ibus-table-chinese-quick \
+    fcitx5-mozc \
     socat \
     zstd \
     zenity \
