@@ -354,6 +354,7 @@ RUN rpm-ostree install \
         cockpit-system \
         cockpit-navigator \
         cockpit-storaged \
+        ydotool \
         lsb_release && \
     pip install --prefix=/usr topgrade && \
     rpm-ostree install \
@@ -441,8 +442,8 @@ RUN rpm-ostree install \
         libobs_glcapture.i686 \
         mangohud.x86_64 \
         mangohud.i686 && \
-    ln -s wine64 /usr/bin/wine && \
-    ln -s wine64-preloader /usr/bin/wine-preloader && \
+    ln -s wine32 /usr/bin/wine && \
+    ln -s wine32-preloader /usr/bin/wine-preloader && \
     ln -s wineserver64 /usr/bin/wineserver && \
     if grep -q "kinoite" <<< "${BASE_IMAGE_NAME}"; then \
         rpm-ostree override remove \
@@ -471,7 +472,8 @@ RUN rpm-ostree install \
 # Configure KDE & GNOME
 RUN if grep -q "kinoite" <<< "${BASE_IMAGE_NAME}"; then \
         rpm-ostree install \
-            qt && \
+            qt \
+            krdp && \
         rpm-ostree override remove \
             plasma-welcome && \
         rpm-ostree override replace \
@@ -517,9 +519,7 @@ RUN if grep -q "kinoite" <<< "${BASE_IMAGE_NAME}"; then \
         --from repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
             mutter \
             mutter-common \
-            gnome-shell \
-            vte291 \
-            vte-profile && \
+            gnome-shell && \
         rpm-ostree install \
             ptyxis \
             nautilus-open-any-terminal \
